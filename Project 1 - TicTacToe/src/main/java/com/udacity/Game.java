@@ -141,6 +141,56 @@ public class Game {
 
 
     /**
+     * Checks if a particular player won the game
+     * @param grid 2D array
+     * @param turn player
+     * @return boolean
+     */
+    public boolean didWin(char [][] grid, char player) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        // check rows
+        for(int i = 0; i < rows; i++){
+            int moves = 0;
+            for(int j = 0; j < cols; j++){
+                if (grid[i][j] == player) {
+                    moves++;
+                }
+            }
+            if (moves == rows) {
+                return true;
+            }
+        }
+
+        // check columns
+        for(int i = 0; i < cols; i++){
+            int moves = 0;
+            for(int j = 0; j < rows; j++){
+                if (grid[j][i] == player) {
+                    moves++;
+                }
+            }
+            if (moves == cols) {
+                return true;
+            }
+        }
+
+        // check diagonals
+        int leftDiagonal = 0;
+        int rightDiagonal = 0;
+        for(int i = 0; i < rows; i++){
+            if (grid[i][i] == player){
+                leftDiagonal++;
+            }
+            if(grid[rows - i - 1][i] == player){
+                rightDiagonal++;
+            }
+        }
+        return leftDiagonal == rows || rightDiagonal == rows;
+
+    }
+    /**
      * Checks if the game has ended either because a player has won, or if the game has ended as a tie.
      * If game hasn't ended the return string has to be "None",
      * If the game ends as tie, the return string has to be "Tie",
@@ -150,7 +200,17 @@ public class Game {
      */
     public String checkGameWinner(char [][]grid){
         String result = "None";
-        //Student code goes here ...
+        boolean circleWin = didWin(grid, 'o');
+        boolean crossWin = didWin(grid, 'x');
+
+        if (circleWin) {
+            result = "O wins";
+        } else if (crossWin) {
+            result = "X wins";
+        } else if (freeSpots == 0) {
+            result = "Tie";
+        }
+
         return result;
     }
 
